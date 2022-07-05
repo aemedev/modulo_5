@@ -63,6 +63,11 @@ let crearProducto = (a)=> {
     crearPrecio.textContent = a.price + (" €");
     crearDivCard.append(crearPrecio);
 
+    let crearBoton = document.createElement('BUTTON');
+    crearBoton.classList.add("btn");
+    crearBoton.textContent = "Eliminar";
+    crearDivCard.append(crearBoton);
+
     let divContenedor = document.querySelector('#contenidoLista');
     divContenedor.append(crearDivCard);
 };
@@ -125,6 +130,17 @@ let precioTotal = ()=> {
 }
 
 
+//Logica Para eliminar un producto del carrito
+let eliminarProducto = ()=>{
+    let botonesBorrar = document.querySelectorAll('.btn');
+    for (let i = 0; i < botonesBorrar.length; i++) {
+        let boton = botonesBorrar[i];
+        boton.addEventListener('click', e =>{
+            let botonClicado = e.target;
+            botonClicado.parentElement.remove();
+        })
+    }
+}
 
 
 //Logica para seleccionar que tipo de producto mostrar
@@ -132,19 +148,19 @@ let selectTipoProducto = ()=> {
     let filtro = document.querySelector('#filtro');
     let valueSelect = filtro.options[filtro.selectedIndex].value;
 
-
     limpiarTabla();
 
 
     if (valueSelect === '1') {
         todosProductos();
-
-        console.log('Hola');
+        
     } else {
         productoPremium();
-        console.log('adios')
+
     }
-    
     precioTotal();
+
+    eliminarProducto();
+
 }
 filtro.addEventListener('change', selectTipoProducto);
