@@ -43,6 +43,7 @@ const carrito = [
 let crearProducto = (a)=> {
     let crearDivCard = document.createElement('DIV');
     crearDivCard.classList.add("product-card");
+    crearDivCard.setAttribute('id', 'card' + a.id);
 
     let crearImg = document.createElement('IMG');
     crearImg.classList.add("crearImg");
@@ -66,6 +67,9 @@ let crearProducto = (a)=> {
     let crearBoton = document.createElement('BUTTON');
     crearBoton.classList.add("btn");
     crearBoton.textContent = "Eliminar";
+    crearBoton.addEventListener('click', ()=>{
+        eliminarProducto(a.id);
+    })
     crearDivCard.append(crearBoton);
 
     let divContenedor = document.querySelector('#contenidoLista');
@@ -89,57 +93,65 @@ let crearDivPrecioTotal = (e)=> {
 //Limpiar el contenido
 let limpiarTabla = ()=>{
     document.querySelector('#contenidoLista').innerHTML = "";
+    
+}
+
+let limpiarTotal = ()=> {
     document.querySelector('#precioTotal').innerHTML = "";
 }
 
 //Filtrar todos los productos
 let todosProductos = ()=>{
 
-    let todos;
     for (let i = 0; i < carrito.length; i++) {
         console.log(carrito[i]);
-        todos = crearProducto(carrito[i]);
+        crearProducto(carrito[i]);
     }
-
-    return todos;
 };
 
 //Filtrar solo productos con el tag premium
 let productoPremium = ()=>{
 
-    let premiums;
     for (producto of carrito) {
         if (producto.premium) {
-            console.log(producto);
-            premiums = crearProducto(producto);
+            crearProducto(producto);
         }
     }
-
-    return premiums;
 }
 
 
 //Sumar el precio total de los articulos
 let precioTotal = ()=> {
+    limpiarTotal();
     let total = 0;
     for (producto in carrito) {
         total += Math.round(carrito[producto].price);
     }
-
-    return crearDivPrecioTotal(total);
+    crearDivPrecioTotal(total);
 }
 
 
 //Logica Para eliminar un producto del carrito
-let eliminarProducto = ()=>{
-    let botonesBorrar = document.querySelectorAll('.btn');
-    for (let i = 0; i < botonesBorrar.length; i++) {
-        let boton = botonesBorrar[i];
-        boton.addEventListener('click', e =>{
-            let botonClicado = e.target;
-            botonClicado.parentElement.remove();
-        })
+let eliminarProducto = (productId)=>{
+
+    for (let i = 0; i < carrito.length; i++) {
+        if (productId === carrito[i].id) {
+            carrito.splice(i, 1);
+            let selectorId = '#card' + productId;
+            document.querySelector(selectorId).remove();
+        }
     }
+
+    precioTotal();
+
+    // let botonesBorrar = document.querySelectorAll('.btn');
+    // for (let i = 0; i < botonesBorrar.length; i++) {
+    //     let boton = botonesBorrar[i];
+    //     boton.addEventListener('click', e =>{
+    //         let botonClicado = e.target;
+    //         botonClicado.parentElement.remove();
+    //     })
+    // }
 }
 
 
